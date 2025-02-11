@@ -24,7 +24,16 @@ public class Schedule extends BaseEntity{
     @Lob
     private String content;
 
-    public void updateSchedule(String title, String content) {
+    public Schedule() {
+    }
+
+    public Schedule(String authorName, String title, String content) {
+        this.authorName = authorName;
+        this.title = title;
+        this.content = content;
+    }
+
+    public void update(String title, String content) {
         this.title = title;
         this.content = content;
     }

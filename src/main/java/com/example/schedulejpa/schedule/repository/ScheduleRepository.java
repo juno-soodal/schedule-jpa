@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -13,11 +14,8 @@ public class ScheduleRepository {
 
     private final EntityManager em;
 
-    public Long save(Schedule schedule) {
-
+    public void save(Schedule schedule) {
         em.persist(schedule);
-
-        return schedule.getId();
     }
 
     public List<Schedule> findAll() {
@@ -25,13 +23,11 @@ public class ScheduleRepository {
                 .getResultList();
     }
 
-    public void update(Long scheduleId, String title, String content) {
-        Schedule schedule = em.find(Schedule.class, scheduleId);
-        schedule.updateSchedule(title, content);
+    public Optional<Schedule> findById(Long id) {
+        return Optional.ofNullable(em.find(Schedule.class, id));
     }
 
-    public void delete(Long scheduleId) {
-        Schedule schedule = em.find(Schedule.class, scheduleId);
+    public void delete(Schedule schedule) {
         em.remove(schedule);
     }
 
