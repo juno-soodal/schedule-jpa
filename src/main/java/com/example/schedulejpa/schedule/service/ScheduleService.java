@@ -1,5 +1,6 @@
 package com.example.schedulejpa.schedule.service;
 
+import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
 import com.example.schedulejpa.schedule.entity.Schedule;
@@ -7,6 +8,7 @@ import com.example.schedulejpa.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -38,8 +40,30 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
-        schedule.update(requestDto.getTitle(), requestDto.getContent());
+        schedule.update(requestDto.getAuthorName(), requestDto.getTitle(), requestDto.getContent());
         return ScheduleResponseDto.fromSchedule(schedule);
+    }
+
+
+
+
+    @Transactional
+    public ScheduleResponseDto updatePartialSchedule(Long scheduleId, SchedulePatchRequestDto requestDto) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
+
+        if (StringUtils.hasText(requestDto.getAuthorName())) {
+            schedule.updateAuthorName(requestDto.getAuthorName());
+        }
+
+        if (StringUtils.hasText(requestDto.getTitle())) {
+            schedule.updateTitle(requestDto.getTitle());
+        }
+
+        if (StringUtils.hasText(requestDto.getContent())) {
+            schedule.updateContent(requestDto.getContent());
+        }
+        return ScheduleResponseDto.fromSchedule(schedule);
+
     }
 
     @Transactional
@@ -47,6 +71,4 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
         scheduleRepository.delete(schedule);
     }
-
-
 }

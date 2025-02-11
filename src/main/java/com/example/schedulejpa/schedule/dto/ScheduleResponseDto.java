@@ -2,18 +2,20 @@ package com.example.schedulejpa.schedule.dto;
 
 import com.example.schedulejpa.schedule.entity.Schedule;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
+@Getter
 public class ScheduleResponseDto {
 
     private Long id;
     private String authorName;
     private String title;
     private String content;
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime createdAt;
-    @JsonFormat(pattern = "yyyy-MM-dd hh:mm")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updatedAt;
 
     public ScheduleResponseDto(Long id, String authorName, String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
