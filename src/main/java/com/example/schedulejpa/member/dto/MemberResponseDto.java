@@ -1,7 +1,6 @@
 package com.example.schedulejpa.member.dto;
 
 import com.example.schedulejpa.member.entity.Member;
-import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
@@ -24,6 +23,15 @@ public class MemberResponseDto {
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public MemberResponseDto(String email, String name) {
+        this.email = email;
+        this.name = name;
+    }
+
+    public static MemberResponseDto of(String email, String name) {
+        return new MemberResponseDto(email, name);
     }
 
 
