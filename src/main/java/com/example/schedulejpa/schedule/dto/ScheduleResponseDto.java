@@ -41,7 +41,7 @@ public class ScheduleResponseDto {
     public static ScheduleResponseDto fromSchedule(Schedule schedule) {
         return new ScheduleResponseDto(
                 schedule.getId(),
-                schedule.getAuthorName(),
+                schedule.getMember().getName(),
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getCreatedAt(),
