@@ -34,7 +34,8 @@ public class ScheduleController {
 
     @PostMapping
     public ResponseEntity<Response<ScheduleResponseDto>> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
-        return ResponseEntity.ok(Response.of(scheduleService.createSchedule(requestDto)));
+        ;
+        return new ResponseEntity<>(Response.of(scheduleService.createSchedule(requestDto)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{scheduleId}")
@@ -43,25 +44,24 @@ public class ScheduleController {
     }
 
     @PutMapping("/{scheduleId}")
-    public ResponseEntity<Response<ScheduleResponseDto>> updateSchedule(
+    public ResponseEntity<Void> updateSchedule(
             @PathVariable Long scheduleId,
             @RequestBody @Valid ScheduleRequestDto requestDto) {
-
-        return ResponseEntity.ok(Response.of(scheduleService.updateSchedule(scheduleId, requestDto)));
+            scheduleService.updateSchedule(scheduleId,requestDto);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{scheduleId}")
-    public ResponseEntity<Response<ScheduleResponseDto>> updateSchedule(
-            @PathVariable Long scheduleId,
-            @RequestBody SchedulePatchRequestDto requestDto) {
-
-        return ResponseEntity.ok(Response.of(scheduleService.updatePartialSchedule(scheduleId, requestDto)));
+    public ResponseEntity<Void> updateSchedule(
+            @PathVariable Long scheduleId, @RequestBody SchedulePatchRequestDto requestDto) {
+            scheduleService.updatePartialSchedule(scheduleId, requestDto);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Response<Void>> deleteSchedule(@PathVariable Long scheduleId) {
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
         scheduleService.deleteSchedule(scheduleId);
 
-        return ResponseEntity.ok(Response.empty());
+        return ResponseEntity.noContent().build();
     }
 }

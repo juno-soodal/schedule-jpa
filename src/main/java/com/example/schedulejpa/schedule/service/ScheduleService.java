@@ -38,17 +38,17 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
+    public void updateSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
         schedule.update(requestDto.getAuthorName(), requestDto.getTitle(), requestDto.getContent());
-        return ScheduleResponseDto.fromSchedule(schedule);
+
     }
 
 
 
 
     @Transactional
-    public ScheduleResponseDto updatePartialSchedule(Long scheduleId, SchedulePatchRequestDto requestDto) {
+    public void updatePartialSchedule(Long scheduleId, SchedulePatchRequestDto requestDto) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
 
         if (StringUtils.hasText(requestDto.getAuthorName())) {
@@ -62,7 +62,6 @@ public class ScheduleService {
         if (StringUtils.hasText(requestDto.getContent())) {
             schedule.updateContent(requestDto.getContent());
         }
-        return ScheduleResponseDto.fromSchedule(schedule);
 
     }
 
