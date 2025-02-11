@@ -1,4 +1,4 @@
-package com.example.schedulejpa.schedule.controller;
+package com.example.schedulejpa.global.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

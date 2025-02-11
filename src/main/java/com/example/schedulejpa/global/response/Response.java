@@ -1,6 +1,5 @@
-package com.example.schedulejpa.schedule.controller;
+package com.example.schedulejpa.global.response;
 
-import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)

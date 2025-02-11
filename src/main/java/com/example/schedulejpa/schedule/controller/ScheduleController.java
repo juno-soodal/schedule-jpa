@@ -1,5 +1,6 @@
 package com.example.schedulejpa.schedule.controller;
 
+import com.example.schedulejpa.global.response.Response;
 import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
