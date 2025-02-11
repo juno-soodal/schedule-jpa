@@ -1,76 +1,76 @@
-package com.example.schedulejpa.schedule.service;
+package com.example.schedulejpa.member.service;
 
+import com.example.schedulejpa.member.dto.MemberPatchRequestDto;
+import com.example.schedulejpa.member.dto.MemberRequestDto;
+import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.entity.Member;
-import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
-import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
-import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
-import com.example.schedulejpa.schedule.entity.Schedule;
-import com.example.schedulejpa.schedule.repository.ScheduleRepository;
+import com.example.schedulejpa.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleService {
+public class MemberService {
 
-    private final ScheduleRepository scheduleRepository;
+    private final MemberRepository memberRepository;
 
 
     @Transactional
-    public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
-        //TODO  멤버 조회
-        Member member = new Member();
-        Schedule schedule = new Schedule(member, requestDto.getTitle(), requestDto.getContent());
-        scheduleRepository.save(schedule);
-        return ScheduleResponseDto.fromSchedule(schedule);
+    public MemberResponseDto createMember(MemberRequestDto requestDto) {
+        if(memberRepository.existsByEmail(requestDto.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
+        }
+        Member member = new Member(requestDto.getEmail(), requestDto.getName());
+        memberRepository.save(member);
+        return MemberResponseDto.from(member);
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getSchedules() {
-        //TODO  멤버 조회
-        List<Schedule> schedules = scheduleRepository.findAll();
-        return schedules.stream().map(schedule -> ScheduleResponseDto.fromSchedule(schedule)).toList();
+    public List<MemberResponseDto> getMembers() {
+        List<Member> members = memberRepository.findAll();
+
+        return members.stream().map(MemberResponseDto::from).toList();
     }
 
     @Transactional(readOnly = true)
-    public ScheduleResponseDto getSchedule(Long scheduleId) {
-        //TODO  멤버 조회
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
-        return ScheduleResponseDto.fromSchedule(schedule);
+    public MemberResponseDto getMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 유저가 없습니다."));
+        return MemberResponseDto.from(member);
     }
 
     @Transactional
-    public void updateSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
-        //TODO  멤버 조회
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
-        schedule.update(requestDto.getTitle(), requestDto.getContent());
+    public void updateMember(Long memberId, MemberRequestDto requestDto) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 유저가 없습니다."));
+        if(memberRepository.existsByEmail(requestDto.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
+        }
+        member.update(requestDto.getName(), requestDto.getEmail());
 
     }
 
-
-
-
     @Transactional
-    public void updatePartialSchedule(Long scheduleId, SchedulePatchRequestDto requestDto) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
+    public void updatePartialMember(Long memberId, MemberPatchRequestDto requestDto) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 유저가 없습니다."));
 
-        if (StringUtils.hasText(requestDto.getTitle())) {
-            schedule.updateTitle(requestDto.getTitle());
+        if (StringUtils.hasText(requestDto.getEmail())) {
+            member.updateEmail(requestDto.getEmail());
         }
 
-        if (StringUtils.hasText(requestDto.getContent())) {
-            schedule.updateContent(requestDto.getContent());
+        if (StringUtils.hasText(requestDto.getName())) {
+            member.updateName(requestDto.getName());
         }
 
     }
 
     @Transactional
-    public void deleteSchedule(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
-        scheduleRepository.delete(schedule);
+    public void deleteMember(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 유저가 없습니다."));
+        memberRepository.delete(member);
     }
 }
