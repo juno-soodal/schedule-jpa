@@ -26,7 +26,7 @@ public class MemberService {
         if(memberRepository.existsByEmail(requestDto.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
         }
-        Member member = new Member(requestDto.getEmail(), requestDto.getName());
+        Member member = new Member(requestDto.getEmail(), requestDto.getName(), requestDto.getPassword());
         memberRepository.save(member);
         return MemberResponseDto.from(member);
     }
@@ -45,20 +45,13 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMember(Long memberId, MemberRequestDto requestDto) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 유저가 없습니다."));
-        if(memberRepository.existsByEmail(requestDto.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
-        }
-        member.update(requestDto.getName(), requestDto.getEmail());
-
-    }
-
-    @Transactional
     public void updatePartialMember(Long memberId, MemberPatchRequestDto requestDto) {
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"해당 유저가 없습니다."));
 
         if (StringUtils.hasText(requestDto.getEmail())) {
+            if(memberRepository.existsByEmail(requestDto.getEmail())) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
+            }
             member.updateEmail(requestDto.getEmail());
         }
 

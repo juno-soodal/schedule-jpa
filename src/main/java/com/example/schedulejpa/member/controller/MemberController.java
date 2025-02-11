@@ -44,14 +44,6 @@ public class MemberController {
         return ResponseEntity.ok(Response.of(memberService.getMember(memberId)));
     }
 
-    @PutMapping("/{memberId}")
-    public ResponseEntity<Void> updateMember(
-            @PathVariable Long memberId,
-            @RequestBody @Valid MemberRequestDto requestDto) {
-        memberService.updateMember(memberId,requestDto);
-        return ResponseEntity.noContent().build();
-    }
-
     @PatchMapping("/{memberId}")
     public ResponseEntity<Void> updateMember(
             @PathVariable Long memberId, @RequestBody @Valid MemberPatchRequestDto requestDto) {
