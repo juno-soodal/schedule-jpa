@@ -1,5 +1,6 @@
 package com.example.schedulejpa.schedule.service;
 
+import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
@@ -18,29 +19,35 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
+
     @Transactional
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
-        Schedule schedule = new Schedule(requestDto.getAuthorName(), requestDto.getTitle(), requestDto.getContent());
+        //TODO  멤버 조회
+        Member member = new Member();
+        Schedule schedule = new Schedule(member, requestDto.getTitle(), requestDto.getContent());
         scheduleRepository.save(schedule);
         return ScheduleResponseDto.fromSchedule(schedule);
     }
 
     @Transactional(readOnly = true)
     public List<ScheduleResponseDto> getSchedules() {
+        //TODO  멤버 조회
         List<Schedule> schedules = scheduleRepository.findAll();
         return schedules.stream().map(schedule -> ScheduleResponseDto.fromSchedule(schedule)).toList();
     }
 
     @Transactional(readOnly = true)
     public ScheduleResponseDto getSchedule(Long scheduleId) {
+        //TODO  멤버 조회
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
         return ScheduleResponseDto.fromSchedule(schedule);
     }
 
     @Transactional
     public void updateSchedule(Long scheduleId, ScheduleRequestDto requestDto) {
+        //TODO  멤버 조회
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
-        schedule.update(requestDto.getAuthorName(), requestDto.getTitle(), requestDto.getContent());
+        schedule.update(requestDto.getTitle(), requestDto.getContent());
 
     }
 
@@ -50,10 +57,6 @@ public class ScheduleService {
     @Transactional
     public void updatePartialSchedule(Long scheduleId, SchedulePatchRequestDto requestDto) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
-
-        if (StringUtils.hasText(requestDto.getAuthorName())) {
-            schedule.updateAuthorName(requestDto.getAuthorName());
-        }
 
         if (StringUtils.hasText(requestDto.getTitle())) {
             schedule.updateTitle(requestDto.getTitle());

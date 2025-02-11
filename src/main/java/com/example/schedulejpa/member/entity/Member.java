@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
 
+@Getter
 @Entity
 @Table(name = "member")
 public class Member extends BaseEntity {
@@ -15,4 +17,6 @@ public class Member extends BaseEntity {
     private Long id;
 
     private String email;
+
+    private String name;
 }

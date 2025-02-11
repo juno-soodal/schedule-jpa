@@ -1,11 +1,15 @@
 package com.example.schedulejpa.schedule.entity;
 
 import com.example.schedulejpa.global.entity.BaseEntity;
+import com.example.schedulejpa.member.entity.Member;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 
@@ -18,7 +22,10 @@ public class Schedule extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String authorName;
+    //    private String authorName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     private String title;
 
@@ -28,20 +35,15 @@ public class Schedule extends BaseEntity {
     public Schedule() {
     }
 
-    public Schedule(String authorName, String title, String content) {
-        this.authorName = authorName;
+    public Schedule(Member member, String title, String content) {
+        this.member = member;
         this.title = title;
         this.content = content;
     }
 
-    public void update(String authorName, String title, String content) {
-        this.authorName = authorName;
+    public void update(String title, String content) {
         this.title = title;
         this.content = content;
-    }
-
-    public void updateAuthorName(String authorName) {
-        this.authorName = authorName;
     }
 
     public void updateTitle(String title) {
