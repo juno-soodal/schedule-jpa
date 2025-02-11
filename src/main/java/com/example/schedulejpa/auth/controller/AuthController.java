@@ -40,4 +40,16 @@ public class AuthController {
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
         return new ResponseEntity<>(Response.empty(), HttpStatus.NO_CONTENT);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Response<Void>> logout(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+
+        if (session != null) {
+            session.invalidate();
+        }
+
+        return new ResponseEntity<>(Response.empty(), HttpStatus.NO_CONTENT);
+    }
 }
