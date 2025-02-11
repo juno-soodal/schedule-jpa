@@ -1,4 +1,4 @@
-package com.example.schedulejpa.schedule.entity;
+package com.example.schedulejpa.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
