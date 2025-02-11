@@ -39,4 +39,11 @@ public class MemberRepository {
                 .findFirst()
                 .isPresent();
     }
+
+    public Optional<Member> findByEmail(String email) {
+        return em.createQuery("select m from Member m where email = :email", Member.class)
+                .setParameter("email", email)
+                .getResultStream()
+                .findFirst();
+    }
 }
