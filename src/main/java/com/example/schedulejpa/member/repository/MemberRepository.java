@@ -2,8 +2,6 @@ package com.example.schedulejpa.member.repository;
 
 import com.example.schedulejpa.member.entity.Member;
 import jakarta.persistence.EntityManager;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
