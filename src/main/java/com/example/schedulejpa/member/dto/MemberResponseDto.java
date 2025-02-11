@@ -2,6 +2,7 @@ package com.example.schedulejpa.member.dto;
 
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,7 +13,9 @@ public class MemberResponseDto {
     private Long id;
     private String email;
     private String name;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updatedAt;
 
     private MemberResponseDto(Long id, String email, String name, LocalDateTime createdAt, LocalDateTime updatedAt) {
