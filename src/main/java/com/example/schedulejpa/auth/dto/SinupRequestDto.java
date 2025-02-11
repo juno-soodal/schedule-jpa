@@ -1,11 +1,11 @@
-package com.example.schedulejpa.member.dto;
+package com.example.schedulejpa.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
 @Getter
-public class MemberRequestDto {
+public class SinupRequestDto {
 
     @Email
     @NotBlank

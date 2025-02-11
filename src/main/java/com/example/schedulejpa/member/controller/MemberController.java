@@ -1,7 +1,6 @@
 package com.example.schedulejpa.member.controller;
 
 import com.example.schedulejpa.member.dto.MemberPatchRequestDto;
-import com.example.schedulejpa.member.dto.MemberRequestDto;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.service.MemberService;
 import com.example.schedulejpa.global.response.Response;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,12 +28,6 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<Response<List<MemberResponseDto>>> getMembers() {
         return new ResponseEntity<>(Response.of(memberService.getMembers()), HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<Response<MemberResponseDto>> createMember(@RequestBody @Valid MemberRequestDto requestDto) {
-
-        return new ResponseEntity<>(Response.of(memberService.createMember(requestDto)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{memberId}")

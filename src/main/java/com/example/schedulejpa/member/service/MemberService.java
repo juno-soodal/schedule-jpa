@@ -1,7 +1,7 @@
 package com.example.schedulejpa.member.service;
 
 import com.example.schedulejpa.member.dto.MemberPatchRequestDto;
-import com.example.schedulejpa.member.dto.MemberRequestDto;
+import com.example.schedulejpa.auth.dto.SinupRequestDto;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.repository.MemberRepository;
@@ -19,17 +19,6 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
-
-    @Transactional
-    public MemberResponseDto createMember(MemberRequestDto requestDto) {
-        if(memberRepository.existsByEmail(requestDto.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
-        }
-        Member member = new Member(requestDto.getEmail(), requestDto.getName(), requestDto.getPassword());
-        memberRepository.save(member);
-        return MemberResponseDto.from(member);
-    }
 
     @Transactional(readOnly = true)
     public List<MemberResponseDto> getMembers() {
