@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +19,12 @@ public class ScheduleRepository {
         em.persist(schedule);
     }
 
-    public List<Schedule> findAll() {
-        return em.createQuery("select s from Schedule s", Schedule.class)
+    public List<Schedule> findSchedules() {
+        return em.createQuery("select s from Schedule s join fetch s.member m", Schedule.class)
                 .getResultList();
     }
 
-    public Optional<Schedule> findById(Long id) {
+    public Optional<Schedule> findSchedule(Long id) {
         return Optional.ofNullable(em.find(Schedule.class, id));
     }
 
@@ -31,4 +32,10 @@ public class ScheduleRepository {
         em.remove(schedule);
     }
 
+    public void bulkUpdateDeletedAtByMember(String loginEmail) {
+        em.createQuery("update Schedule s set s.deletedAt = :deletedAt where s.member.id in (select id from Member m where m.email = :email)")
+                .setParameter("deletedAt", LocalDateTime.now())
+                .setParameter("email", loginEmail)
+                .executeUpdate();
+    }
 }

@@ -32,7 +32,8 @@ public class MemberRepository {
     }
 
     public boolean existsByEmail(String email) {
-        return em.createQuery("select m from Member m where email = :email", Member.class)
+
+        return em.createNativeQuery("SELECT * FROM member WHERE email = :email",Member.class)
                 .setParameter("email", email)
                 .setMaxResults(1)
                 .getResultStream()

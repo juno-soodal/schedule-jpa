@@ -1,5 +1,7 @@
 package com.example.schedulejpa.schedule.controller;
 
+import com.example.schedulejpa.auth.dto.LoginMember;
+import com.example.schedulejpa.global.resolver.Login;
 import com.example.schedulejpa.global.response.Response;
 import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
@@ -30,13 +32,12 @@ public class ScheduleController {
 
     @GetMapping
     public ResponseEntity<Response<List<ScheduleResponseDto>>> getSchedules() {
-        return new ResponseEntity<>(Response.of(scheduleService.getSchedules()), HttpStatus.OK);
+        return new ResponseEntity<>(Response.of(scheduleService.getSchedules()),HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Response<ScheduleResponseDto>> createSchedule(@RequestBody ScheduleRequestDto requestDto) {
-        ;
-        return new ResponseEntity<>(Response.of(scheduleService.createSchedule(requestDto)), HttpStatus.CREATED);
+    public ResponseEntity<Response<ScheduleResponseDto>> createSchedule(@Login LoginMember loginMember, @RequestBody @Valid ScheduleRequestDto requestDto) {
+        return new ResponseEntity<>(Response.of(scheduleService.createSchedule(loginMember.getEmail(), requestDto)), HttpStatus.CREATED);
     }
 
     @GetMapping("/{scheduleId}")
@@ -47,21 +48,24 @@ public class ScheduleController {
     @PutMapping("/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(
             @PathVariable Long scheduleId,
-            @RequestBody @Valid ScheduleRequestDto requestDto) {
-            scheduleService.updateSchedule(scheduleId,requestDto);
+            @RequestBody @Valid ScheduleRequestDto requestDto,
+            @Login LoginMember loginMember) {
+            scheduleService.updateSchedule(scheduleId,loginMember.getEmail(),requestDto);
         return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{scheduleId}")
     public ResponseEntity<Void> updateSchedule(
-            @PathVariable Long scheduleId, @RequestBody SchedulePatchRequestDto requestDto) {
-            scheduleService.updatePartialSchedule(scheduleId, requestDto);
+            @PathVariable Long scheduleId,
+            @RequestBody SchedulePatchRequestDto requestDto,
+            @Login LoginMember loginMember) {
+            scheduleService.updatePartialSchedule(scheduleId,loginMember.getEmail(), requestDto);
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
-        scheduleService.deleteSchedule(scheduleId);
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId, @Login LoginMember loginMember) {
+        scheduleService.deActivateSchedule(scheduleId, loginMember.getEmail());
 
         return ResponseEntity.noContent().build();
     }

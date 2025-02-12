@@ -7,9 +7,6 @@ import lombok.Getter;
 public class ScheduleRequestDto {
 
     @NotBlank
-    private String authorName;
-
-    @NotBlank
     private String title;
 
     @NotBlank
