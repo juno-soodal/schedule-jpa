@@ -3,6 +3,7 @@ package com.example.schedulejpa.schedule.repository;
 import com.example.schedulejpa.schedule.entity.Schedule;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -19,8 +20,10 @@ public class ScheduleRepository {
         em.persist(schedule);
     }
 
-    public List<Schedule> findSchedules() {
-        return em.createQuery("select s from Schedule s join fetch s.member m", Schedule.class)
+    public List<Schedule> findSchedules(Pageable pageable) {
+        return em.createQuery("select s from Schedule s join fetch s.member m order by s.updatedAt", Schedule.class)
+                .setFirstResult(pageable.getPageNumber())
+                .setMaxResults(pageable.getPageSize())
                 .getResultList();
     }
 
@@ -50,5 +53,11 @@ public class ScheduleRepository {
 
     public void deleteSchedule(Schedule schedule) {
         em.remove(schedule);
+    }
+
+    public Long count() {
+
+       return em.createQuery("select count(s) from Schedule s", Long.class)
+               .getSingleResult();
     }
 }

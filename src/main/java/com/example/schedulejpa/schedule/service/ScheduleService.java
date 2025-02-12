@@ -9,6 +9,8 @@ import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
 import com.example.schedulejpa.schedule.entity.Schedule;
 import com.example.schedulejpa.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,10 +41,13 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<ScheduleResponseDto> getSchedules() {
+    public PageImpl<ScheduleResponseDto> getSchedules(Pageable pageable) {
 
-        List<Schedule> schedules = scheduleRepository.findSchedules();
-        return schedules.stream().map(schedule -> ScheduleResponseDto.fromSchedule(schedule)).toList();
+        Long count = scheduleRepository.count();
+        List<Schedule> schedules = scheduleRepository.findSchedules(pageable);
+        List<ScheduleResponseDto> dtos = schedules.stream().map(schedule -> ScheduleResponseDto.fromSchedule(schedule)).toList();
+
+        return new PageImpl<>(dtos, pageable, count);
     }
 
     @Transactional(readOnly = true)
