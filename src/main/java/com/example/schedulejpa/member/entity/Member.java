@@ -7,12 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@SQLRestriction(value = "deleted_at is NULL")
 @Table(name = "member")
 public class Member extends BaseEntity {
 
@@ -28,6 +30,8 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+    private LocalDateTime deletedAt;
+
     public Member() {
     }
 
@@ -40,6 +44,10 @@ public class Member extends BaseEntity {
     public void update( String name, String email) {
         this.email = email;
         this.name = name;
+    }
+
+    public void softDelete() {
+        this.deletedAt = LocalDateTime.now();
     }
 
     public void updateEmail(String email) {

@@ -1,5 +1,6 @@
 package com.example.schedulejpa.auth.service;
 
+import com.example.schedulejpa.auth.dto.LoginMember;
 import com.example.schedulejpa.auth.dto.SinupRequestDto;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.entity.Member;
@@ -20,6 +21,7 @@ public class AuthService {
 
     @Transactional
     public void signup(SinupRequestDto requestDto) {
+        //TODO 회원 복구 기능
         if(memberRepository.existsByEmail(requestDto.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 존재하는 이메일입니다.");
         }
@@ -29,7 +31,7 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public MemberResponseDto login(String email, String password) {
+    public LoginMember login(String email, String password) {
         Member member = memberRepository.findByEmail(email)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 맞지 않습니다."));
 
@@ -38,6 +40,6 @@ public class AuthService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 맞지 않습니다.");
         }
 
-        return MemberResponseDto.of(member.getEmail(),member.getName());
+        return LoginMember.of(member.getEmail(),member.getName());
     }
 }

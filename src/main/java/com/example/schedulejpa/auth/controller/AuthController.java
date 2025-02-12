@@ -1,11 +1,11 @@
 package com.example.schedulejpa.auth.controller;
 
+import com.example.schedulejpa.auth.dto.LoginMember;
 import com.example.schedulejpa.auth.dto.LoginRequestDto;
 import com.example.schedulejpa.auth.service.AuthService;
 import com.example.schedulejpa.global.constant.SessionConst;
 import com.example.schedulejpa.global.response.Response;
 import com.example.schedulejpa.auth.dto.SinupRequestDto;
-import com.example.schedulejpa.member.dto.MemberResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -33,7 +33,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<Response<Void>> login(@RequestBody @Valid LoginRequestDto requestDto, HttpServletRequest request) {
 
-        MemberResponseDto loginMember = authService.login(requestDto.getEmail(), requestDto.getPassword());
+        LoginMember loginMember = authService.login(requestDto.getEmail(), requestDto.getPassword());
 
         HttpSession session = request.getSession();
 
@@ -52,4 +52,5 @@ public class AuthController {
 
         return new ResponseEntity<>(Response.empty(), HttpStatus.NO_CONTENT);
     }
+
 }

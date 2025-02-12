@@ -12,9 +12,13 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
+@SQLRestriction(value = "deleted_at is null")
 @Table(name = "schedule")
 public class Schedule extends BaseEntity {
 
@@ -31,6 +35,8 @@ public class Schedule extends BaseEntity {
 
     @Lob
     private String content;
+
+    private LocalDateTime deletedAt;
 
     public Schedule() {
     }
@@ -52,5 +58,9 @@ public class Schedule extends BaseEntity {
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void deactivate() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

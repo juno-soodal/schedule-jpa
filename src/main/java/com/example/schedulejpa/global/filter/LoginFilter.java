@@ -17,7 +17,6 @@ import java.io.IOException;
 
 @Slf4j
 public class LoginFilter implements Filter {
-    private static final String PREFIX = "";
     private static final String[] whitelist = {"/api/v1/members/login", "/api/v1/members/logout", "/api/v1/members/signup"};
 
 

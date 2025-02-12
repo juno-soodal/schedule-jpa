@@ -25,16 +25,6 @@ public class MemberResponseDto {
         this.updatedAt = updatedAt;
     }
 
-    public MemberResponseDto(String email, String name) {
-        this.email = email;
-        this.name = name;
-    }
-
-    public static MemberResponseDto of(String email, String name) {
-        return new MemberResponseDto(email, name);
-    }
-
-
     public static MemberResponseDto from(Member member) {
         return new MemberResponseDto(
                 member.getId(),
