@@ -21,7 +21,7 @@ public class ScheduleRepository {
     }
 
     public List<Schedule> findSchedules(Pageable pageable) {
-        return em.createQuery("select s from Schedule s join fetch s.member m order by s.updatedAt", Schedule.class)
+        return em.createQuery("select s from Schedule s join fetch s.member m order by s.updatedAt desc", Schedule.class)
                 .setFirstResult(pageable.getPageNumber())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

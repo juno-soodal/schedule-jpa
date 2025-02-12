@@ -49,7 +49,9 @@ public class CommentService {
 
         Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new IllegalArgumentException("없는 일정입니다."));
 
-        Comment comment = new Comment(requestDto.getCommentContent(), member,schedule);
+        Comment comment = new Comment(requestDto.getCommentContent(), member);
+        schedule.addComment(comment);
+
         commentRepository.save(comment);
 
     }

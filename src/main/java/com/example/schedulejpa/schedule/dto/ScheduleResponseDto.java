@@ -13,29 +13,20 @@ public class ScheduleResponseDto {
     private String authorName;
     private String title;
     private String content;
+    private int commentCnt;
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime createdAt;
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updatedAt;
 
-    public ScheduleResponseDto(Long id, String authorName, String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ScheduleResponseDto(Long id, String authorName, String title, String content, int commentCnt, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.authorName = authorName;
         this.title = title;
         this.content = content;
+        this.commentCnt = commentCnt;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-    }
-
-    public static  ScheduleResponseDto of(Long id, String authorName, String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        return new ScheduleResponseDto(
-                id,
-                authorName,
-                title,
-                content,
-                createdAt,
-                updatedAt
-        );
     }
 
     public static ScheduleResponseDto fromSchedule(Schedule schedule) {
@@ -44,6 +35,7 @@ public class ScheduleResponseDto {
                 schedule.getMember().getName(),
                 schedule.getTitle(),
                 schedule.getContent(),
+                schedule.getComments().size(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt()
         );

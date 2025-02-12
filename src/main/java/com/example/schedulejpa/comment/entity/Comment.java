@@ -39,13 +39,16 @@ public class Comment extends BaseEntity {
     protected Comment() {
     }
 
-    public Comment(String commentContent, Member member, Schedule schedule) {
+    public Comment(String commentContent, Member member) {
         this.commentContent = commentContent;
         this.member = member;
-        this.schedule = schedule;
     }
 
     public void updateCommentContent( String commentContent) {
         this.commentContent = commentContent;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 }
