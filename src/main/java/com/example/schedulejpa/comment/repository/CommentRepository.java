@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,5 +31,22 @@ public class CommentRepository {
 
     public void save(Comment comment) {
         em.persist(comment);
+    }
+
+    public void bulkUpdateDeletedAtByMember(Long memberId) {
+        em.createQuery("update Comment c set c.deletedAt = :deletedAt where c.member.id = :memberId")
+                .setParameter("deletedAt", LocalDateTime.now())
+                .setParameter("memberId", memberId)
+                .executeUpdate();
+    }
+
+    public void deleteComment(Comment comment) {
+        em.remove(comment);
+    }
+
+    public void bulkDelete(Long scheduleId) {
+        em.createNativeQuery("DELETE FROM comment WHERE schedule_id = :scheduleId")
+                .setParameter("scheduleId", scheduleId)
+                .executeUpdate();
     }
 }

@@ -1,6 +1,5 @@
 package com.example.schedulejpa.schedule.repository;
 
-import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.schedule.entity.Schedule;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +32,10 @@ public class ScheduleRepository {
         em.remove(schedule);
     }
 
-    public void bulkUpdateDeletedAtByMember(String loginEmail) {
-        em.createQuery("update Schedule s set s.deletedAt = :deletedAt where s.member.id in (select id from Member m where m.email = :email)")
+    public void bulkUpdateDeletedAtByMember(Long memberId) {
+        em.createQuery("update Schedule s set s.deletedAt = :deletedAt where s.member.id = :memberId")
                 .setParameter("deletedAt", LocalDateTime.now())
-                .setParameter("email", loginEmail)
+                .setParameter("memberId", memberId)
                 .executeUpdate();
     }
 
@@ -47,5 +46,9 @@ public class ScheduleRepository {
                 .getResultStream()
                 .findFirst()
                 .isPresent();
+    }
+
+    public void deleteSchedule(Schedule schedule) {
+        em.remove(schedule);
     }
 }

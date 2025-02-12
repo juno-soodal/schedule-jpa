@@ -1,5 +1,6 @@
 package com.example.schedulejpa.schedule.service;
 
+import com.example.schedulejpa.comment.service.CommentService;
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.repository.MemberRepository;
 import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
@@ -23,6 +24,8 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     //TODO repository service로 분리
     private final MemberRepository memberRepository;
+
+    private final CommentService commentService;
 
 
     @Transactional
@@ -85,7 +88,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void softDeleteSchedule(Long scheduleId, String loginEmail) {
+    public void deleteSchedule(Long scheduleId, String loginEmail) {
         Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
 
 
@@ -95,12 +98,14 @@ public class ScheduleService {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "삭제 권한이 없습니다.");
         }
 
+        commentService.deleteAllByScheduleId(schedule.getId());
+        scheduleRepository.deleteSchedule(schedule);
+
         // 기획:수정 일자도 변경
-        schedule.softDelete();
     }
 
     @Transactional
-    public void softDeleteSchedulesByMember(String loginEmail) {
-        scheduleRepository.bulkUpdateDeletedAtByMember(loginEmail);
+    public void softDeleteSchedulesByMember(Long memberId) {
+        scheduleRepository.bulkUpdateDeletedAtByMember(memberId);
     }
 }

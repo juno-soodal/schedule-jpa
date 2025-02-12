@@ -1,5 +1,6 @@
 package com.example.schedulejpa.member.service;
 
+import com.example.schedulejpa.comment.service.CommentService;
 import com.example.schedulejpa.global.config.PasswordEncoder;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.entity.Member;
@@ -19,6 +20,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final ScheduleService scheduleService;
+    private final CommentService commentService;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
@@ -57,7 +59,8 @@ public class MemberService {
         }
 
         //TODO 연관엔티티 삭제로직
-        scheduleService.softDeleteSchedulesByMember(loginEmail);
+        scheduleService.softDeleteSchedulesByMember(member.getId());
+        commentService.softDeleteCommentsByMember(member.getId());
         member.softDelete();
     }
 }

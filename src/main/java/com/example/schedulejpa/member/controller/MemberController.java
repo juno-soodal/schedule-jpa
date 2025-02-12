@@ -7,6 +7,8 @@ import com.example.schedulejpa.member.dto.MemberRequestDto;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.service.MemberService;
 import com.example.schedulejpa.global.response.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,10 +49,13 @@ public class MemberController {
     }
 
     @PostMapping("/delete")
-    public ResponseEntity<Void> withdraw(@Login LoginMember loginMember, @RequestBody @Valid MemberDeleteRequestDto requestDto) {
+    public ResponseEntity<Void> withdraw(@Login LoginMember loginMember, HttpServletRequest request, @RequestBody @Valid MemberDeleteRequestDto requestDto) {
         log.info("password = {}", requestDto.getPassword());
         memberService.withdraw(loginMember.getEmail(), requestDto.getPassword());
-
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         return ResponseEntity.noContent().build();
     }
 }

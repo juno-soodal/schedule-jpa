@@ -36,10 +36,6 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public void softDelete() {
-        this.deletedAt = LocalDateTime.now();
-    }
-
     protected Comment() {
     }
 

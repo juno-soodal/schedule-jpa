@@ -60,7 +60,4 @@ public class Schedule extends BaseEntity {
         this.content = content;
     }
 
-    public void softDelete() {
-        this.deletedAt = LocalDateTime.now();
-    }
 }

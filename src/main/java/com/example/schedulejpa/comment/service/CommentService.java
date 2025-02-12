@@ -66,14 +66,22 @@ public class CommentService {
     }
 
     @Transactional
-    public void softDeleteComment(Long commentId, String loginEmail) {
+    public void deleteByMemberEmail(Long commentId, String loginEmail) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "없는 댓글입니다."));
 
         //TODO 리팩토링 필요
         if (!comment.getMember().getEmail().equals(loginEmail)) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정권한이 없습니다.");
         }
+        commentRepository.deleteComment(comment);
+    }
 
-        comment.softDelete();
+    public void softDeleteCommentsByMember(Long memberId) {
+
+        commentRepository.bulkUpdateDeletedAtByMember(memberId);
+    }
+
+    public void deleteAllByScheduleId(Long scheduleId) {
+        commentRepository.bulkDelete(scheduleId);
     }
 }

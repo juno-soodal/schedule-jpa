@@ -53,7 +53,7 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Response<Void>> deleteComment(@PathVariable Long commentId, @Login LoginMember loginMember) {
-        commentService.softDeleteComment(commentId,loginMember.getEmail());
+        commentService.deleteByMemberEmail(commentId,loginMember.getEmail());
         return new ResponseEntity<>(Response.empty(), HttpStatus.NO_CONTENT);
     }
 }
