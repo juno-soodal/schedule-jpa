@@ -1,5 +1,6 @@
 package com.example.schedulejpa.member.service;
 
+import com.example.schedulejpa.global.config.PasswordEncoder;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.repository.MemberRepository;
@@ -18,6 +19,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final ScheduleService scheduleService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<MemberResponseDto> getMembers() {
@@ -50,9 +52,10 @@ public class MemberService {
         Member member = memberRepository.findByEmail(loginEmail).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 유저가 없습니다."));
 
         //TODO 비밀번호 검증로직
-        if (!member.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, member.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지않습니다.");
         }
+
         //TODO 연관엔티티 삭제로직
         scheduleService.softDeleteSchedulesByMember(loginEmail);
         member.softDelete();
