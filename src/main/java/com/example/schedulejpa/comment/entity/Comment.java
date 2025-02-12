@@ -35,4 +35,21 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void softDelete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
+    protected Comment() {
+    }
+
+    public Comment(String commentContent, Member member, Schedule schedule) {
+        this.commentContent = commentContent;
+        this.member = member;
+        this.schedule = schedule;
+    }
+
+    public void updateCommentContent( String commentContent) {
+        this.commentContent = commentContent;
+    }
 }

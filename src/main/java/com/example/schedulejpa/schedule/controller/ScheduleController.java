@@ -65,7 +65,7 @@ public class ScheduleController {
 
     @DeleteMapping("/{scheduleId}")
     public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId, @Login LoginMember loginMember) {
-        scheduleService.deActivateSchedule(scheduleId, loginMember.getEmail());
+        scheduleService.softDeleteSchedule(scheduleId, loginMember.getEmail());
 
         return ResponseEntity.noContent().build();
     }

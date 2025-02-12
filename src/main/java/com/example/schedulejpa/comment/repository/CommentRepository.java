@@ -27,4 +27,8 @@ public class CommentRepository {
                 .getResultStream()
                 .findFirst();
     }
+
+    public void save(Comment comment) {
+        em.persist(comment);
+    }
 }

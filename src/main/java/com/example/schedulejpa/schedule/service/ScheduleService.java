@@ -85,7 +85,7 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void deActivateSchedule(Long scheduleId, String loginEmail) {
+    public void softDeleteSchedule(Long scheduleId, String loginEmail) {
         Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
 
 
@@ -96,7 +96,7 @@ public class ScheduleService {
         }
 
         // 기획:수정 일자도 변경
-        schedule.deactivate();
+        schedule.softDelete();
     }
 
     @Transactional
