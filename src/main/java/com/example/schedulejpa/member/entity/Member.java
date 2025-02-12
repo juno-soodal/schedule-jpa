@@ -32,7 +32,7 @@ public class Member extends BaseEntity {
 
     private LocalDateTime deletedAt;
 
-    public Member() {
+    protected Member() {
     }
 
     public Member(String email, String name, String password) {

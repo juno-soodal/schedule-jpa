@@ -38,7 +38,7 @@ public class Schedule extends BaseEntity {
 
     private LocalDateTime deletedAt;
 
-    public Schedule() {
+    protected Schedule() {
     }
 
     public Schedule(Member member, String title, String content) {
