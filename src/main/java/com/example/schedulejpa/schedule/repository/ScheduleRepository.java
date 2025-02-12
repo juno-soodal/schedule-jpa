@@ -1,5 +1,6 @@
 package com.example.schedulejpa.schedule.repository;
 
+import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.schedule.entity.Schedule;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,14 @@ public class ScheduleRepository {
                 .setParameter("deletedAt", LocalDateTime.now())
                 .setParameter("email", loginEmail)
                 .executeUpdate();
+    }
+
+    public boolean existsById(Long scheduleId) {
+        return em.createQuery("select s from Schedule s WHERE s.id = :id", Schedule.class)
+                .setParameter("id", scheduleId)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .isPresent();
     }
 }
