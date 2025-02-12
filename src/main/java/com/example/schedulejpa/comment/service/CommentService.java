@@ -30,4 +30,12 @@ public class CommentService {
         return comments.stream().map(comment -> CommentResponseDto.from(comment)).toList();
     }
 
+    @Transactional(readOnly = true)
+    public CommentResponseDto getComment(Long commentId) {
+
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "없는 댓글입니다."));
+
+        return CommentResponseDto.from(comment);
+    }
+
 }

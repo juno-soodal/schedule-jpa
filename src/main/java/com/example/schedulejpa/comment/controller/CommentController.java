@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,11 @@ public class CommentController {
 
     @GetMapping
     public ResponseEntity<Response<List<CommentResponseDto>>> getComments(@RequestParam Long scheduleId) {
-        System.out.println(1);
         return new ResponseEntity<>(Response.of(commentService.getComments(scheduleId)), HttpStatus.OK);
+    }
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity<Response<CommentResponseDto>> getComment(@PathVariable Long commentId) {
+        return new ResponseEntity<>(Response.of(commentService.getComment(commentId)), HttpStatus.OK);
     }
 }
