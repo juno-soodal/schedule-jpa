@@ -2,11 +2,8 @@ package com.example.schedulejpa.auth.service;
 
 import com.example.schedulejpa.auth.dto.LoginMember;
 import com.example.schedulejpa.auth.dto.SinupRequestDto;
-import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.repository.MemberRepository;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
