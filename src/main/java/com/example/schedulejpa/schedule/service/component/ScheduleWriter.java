@@ -1,4 +1,4 @@
-package com.example.schedulejpa.schedule.service;
+package com.example.schedulejpa.schedule.service.component;
 
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;

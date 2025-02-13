@@ -1,4 +1,4 @@
-package com.example.schedulejpa.schedule.service;
+package com.example.schedulejpa.schedule.service.component;
 
 import com.example.schedulejpa.schedule.entity.Schedule;
 import com.example.schedulejpa.schedule.exception.ScheduleNotFoundException;
@@ -11,13 +11,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ScheduleReader {
+public class ScheduleFinder {
 
     private final ScheduleRepository scheduleRepository;
 
-    public Long count() {
-        return scheduleRepository.count();
-    }
 
     public List<Schedule> findSchedules(Pageable pageable) {
         return scheduleRepository.findSchedules(pageable);
@@ -26,4 +23,5 @@ public class ScheduleReader {
     public Schedule findSchedule(Long scheduleId) {
         return scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new ScheduleNotFoundException());
     }
+
 }
