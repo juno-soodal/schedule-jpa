@@ -4,6 +4,7 @@ import com.example.schedulejpa.comment.service.component.CommentWriter;
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.exception.UnAuthorizedAccessException;
 import com.example.schedulejpa.member.service.component.MemberFinder;
+import com.example.schedulejpa.schedule.dto.PaginationRequest;
 import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
@@ -13,6 +14,7 @@ import com.example.schedulejpa.schedule.service.component.ScheduleReader;
 import com.example.schedulejpa.schedule.service.component.ScheduleWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,10 +42,14 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public PageImpl<ScheduleResponseDto> getSchedules(Pageable pageable) {
+    public PageImpl<ScheduleResponseDto> getSchedules(int page, int size) {
 
         Long count = scheduleReader.count();
-        List<Schedule> schedules = scheduleFinder.findSchedules(pageable);
+
+        int adjustedPage = page > 0 ? page - 1 : 0;
+        Pageable pageable = PageRequest.of(adjustedPage, size);
+
+        List<Schedule> schedules = scheduleFinder.findSchedules(adjustedPage, size);
         List<ScheduleResponseDto> dtos = schedules.stream().map(schedule -> ScheduleResponseDto.fromSchedule(schedule)).toList();
 
         return new PageImpl<>(dtos, pageable, count);
