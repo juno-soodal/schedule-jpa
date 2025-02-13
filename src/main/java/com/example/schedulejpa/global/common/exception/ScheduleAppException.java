@@ -1,7 +1,9 @@
 package com.example.schedulejpa.global.common.exception;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ScheduleAppException extends RuntimeException {
 
     private HttpStatus status;

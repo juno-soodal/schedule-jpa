@@ -4,6 +4,8 @@ import com.example.schedulejpa.comment.service.CommentService;
 import com.example.schedulejpa.global.config.PasswordEncoder;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.entity.Member;
+import com.example.schedulejpa.member.exception.InvalidPasswordException;
+import com.example.schedulejpa.member.exception.MemberNotFoundException;
 import com.example.schedulejpa.member.repository.MemberRepository;
 import com.example.schedulejpa.schedule.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
@@ -32,30 +34,30 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public MemberResponseDto getMember(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 유저가 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
         return MemberResponseDto.from(member);
     }
 
     @Transactional
     public void updateMemberName(String email, String newName) {
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 유저가 없습니다."));
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new MemberNotFoundException());
         member.updateName(newName);
 
     }
 
     @Transactional
     public void deleteMember(Long memberId) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 유저가 없습니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
         memberRepository.delete(member);
     }
 
     @Transactional
     public void withdraw(String loginEmail, String password) {
-        Member member = memberRepository.findByEmail(loginEmail).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 유저가 없습니다."));
+        Member member = memberRepository.findByEmail(loginEmail).orElseThrow(() -> new MemberNotFoundException());
 
         //TODO 비밀번호 검증로직
         if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지않습니다.");
+            throw new InvalidPasswordException();
         }
 
         //TODO 연관엔티티 삭제로직

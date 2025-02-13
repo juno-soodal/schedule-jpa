@@ -3,6 +3,7 @@ package com.example.schedulejpa.global.common.exception;
 import com.example.schedulejpa.global.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,5 +23,10 @@ public class GlobalExceptionHandler {
                 map(fieldError -> fieldError.getDefaultMessage()).
                 orElseThrow(() -> new IllegalStateException("검증 에러가 반드시 존재해야 합니다."));
         return ErrorResponse.of("ARGUMENT_NOT_VALID", errorMessage);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleScheduleAppException(ScheduleAppException e) {
+        return new ResponseEntity<>(ErrorResponse.of(e.getCode(), e.getMessage()), e.getStatus());
     }
 }

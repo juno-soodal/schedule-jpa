@@ -2,6 +2,10 @@ package com.example.schedulejpa.global.filter;
 
 
 import com.example.schedulejpa.global.constant.SessionConst;
+import com.example.schedulejpa.global.response.ErrorResponse;
+import com.example.schedulejpa.member.exception.UnAuthorizedAccessException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -27,18 +31,29 @@ public class LoginFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
 
         log.info("인증 체크 필터 시작 {}", requestURI);
+        try {
             if (isLoginCheckPath(requestURI)) {
                 log.info("인증 체크 로직 실행 {}", requestURI);
                 HttpSession session = httpRequest.getSession(false);
                 if (session == null || session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
                     //TODO exception handling
-                    httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
-                    return;
+                    throw new UnAuthorizedAccessException();
                 }
-            };
-
+            }
             filterChain.doFilter(servletRequest, servletResponse);
+        } catch (UnAuthorizedAccessException e) {
+            handleUnAuthorizedAccess(e, httpResponse);
+        }
 
+    }
+
+    private void handleUnAuthorizedAccess(UnAuthorizedAccessException e, HttpServletResponse httpResponse) throws IOException {
+        httpResponse.setContentType("application/json");
+        httpResponse.setCharacterEncoding("UTF-8");
+        httpResponse.setStatus(e.getStatus().value());
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        httpResponse.getWriter().write(objectMapper.writeValueAsString(ErrorResponse.of(e.getCode(), e.getMessage())));
     }
 
     private boolean isLoginCheckPath(String requestURI) {
