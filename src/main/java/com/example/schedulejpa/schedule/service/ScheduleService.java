@@ -1,13 +1,16 @@
 package com.example.schedulejpa.schedule.service;
 
-import com.example.schedulejpa.comment.service.CommentWriter;
+import com.example.schedulejpa.comment.service.component.CommentWriter;
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.exception.UnAuthorizedAccessException;
-import com.example.schedulejpa.member.service.MemberReader;
+import com.example.schedulejpa.member.service.component.MemberFinder;
 import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
 import com.example.schedulejpa.schedule.entity.Schedule;
+import com.example.schedulejpa.schedule.service.component.ScheduleFinder;
+import com.example.schedulejpa.schedule.service.component.ScheduleReader;
+import com.example.schedulejpa.schedule.service.component.ScheduleWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +24,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleService {
 
-    private final MemberReader memberReader;
+    private final MemberFinder memberFinder;
     private final ScheduleWriter scheduleWriter;
+    private final ScheduleFinder scheduleFinder;
     private final ScheduleReader scheduleReader;
     private final CommentWriter commentWriter;
 
@@ -30,7 +34,7 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto createSchedule(String loginEmail, ScheduleRequestDto requestDto) {
-        Member member = memberReader.findByEmail(loginEmail);
+        Member member = memberFinder.findByEmail(loginEmail);
         Schedule schedule = scheduleWriter.create(member, requestDto);
         return ScheduleResponseDto.fromSchedule(schedule);
     }
@@ -39,7 +43,7 @@ public class ScheduleService {
     public PageImpl<ScheduleResponseDto> getSchedules(Pageable pageable) {
 
         Long count = scheduleReader.count();
-        List<Schedule> schedules = scheduleReader.findSchedules(pageable);
+        List<Schedule> schedules = scheduleFinder.findSchedules(pageable);
         List<ScheduleResponseDto> dtos = schedules.stream().map(schedule -> ScheduleResponseDto.fromSchedule(schedule)).toList();
 
         return new PageImpl<>(dtos, pageable, count);
@@ -47,13 +51,13 @@ public class ScheduleService {
 
     @Transactional(readOnly = true)
     public ScheduleResponseDto getSchedule(Long scheduleId) {
-        Schedule schedule = scheduleReader.findSchedule(scheduleId);
+        Schedule schedule = scheduleFinder.findSchedule(scheduleId);
         return ScheduleResponseDto.fromSchedule(schedule);
     }
 
     @Transactional
     public void updateSchedule(Long scheduleId, String loginEmail, ScheduleRequestDto requestDto) {
-        Schedule schedule = scheduleReader.findSchedule(scheduleId);
+        Schedule schedule = scheduleFinder.findSchedule(scheduleId);
 
         //TODO JOIN FETCH 고려
         if (!schedule.getMember().isSameEmail(loginEmail)) {
@@ -66,7 +70,7 @@ public class ScheduleService {
 
     @Transactional
     public void updatePartialSchedule(Long scheduleId,String loginEmail, SchedulePatchRequestDto requestDto) {
-        Schedule schedule = scheduleReader.findSchedule(scheduleId);
+        Schedule schedule = scheduleFinder.findSchedule(scheduleId);
 
         //TODO JOIN FETCH 고려
         if (!schedule.getMember().isSameEmail(loginEmail)) {
@@ -86,7 +90,7 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(Long scheduleId, String loginEmail) {
 
-        Schedule schedule = scheduleReader.findSchedule(scheduleId);
+        Schedule schedule = scheduleFinder.findSchedule(scheduleId);
 
 
         //TODO JOIN FETCH 고려

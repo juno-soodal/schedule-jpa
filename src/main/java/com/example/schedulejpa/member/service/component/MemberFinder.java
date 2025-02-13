@@ -1,4 +1,4 @@
-package com.example.schedulejpa.member.service;
+package com.example.schedulejpa.member.service.component;
 
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.exception.MemberNotFoundException;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class MemberReader {
+public class MemberFinder {
 
     private final MemberRepository memberRepository;
 
@@ -23,6 +23,6 @@ public class MemberReader {
     }
 
     public Member findById(Long memberId) {
-        memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
+        return memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
     }
 }
