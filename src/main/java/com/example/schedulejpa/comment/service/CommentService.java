@@ -80,11 +80,6 @@ public class CommentService {
         commentRepository.deleteComment(comment);
     }
 
-    public void softDeleteCommentsByMember(Long memberId) {
-
-        commentRepository.bulkUpdateDeletedAtByMember(memberId);
-    }
-
     public void deleteAllByScheduleId(Long scheduleId) {
         commentRepository.bulkDeleteByScheduleId(scheduleId);
     }
