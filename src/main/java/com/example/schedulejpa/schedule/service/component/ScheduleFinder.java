@@ -16,8 +16,8 @@ public class ScheduleFinder {
     private final ScheduleRepository scheduleRepository;
 
 
-    public List<Schedule> findSchedules(Pageable pageable) {
-        return scheduleRepository.findSchedules(pageable);
+    public List<Schedule> findSchedules(int page, int size) {
+        return scheduleRepository.findSchedules(page, size);
     }
 
     public Schedule findSchedule(Long scheduleId) {

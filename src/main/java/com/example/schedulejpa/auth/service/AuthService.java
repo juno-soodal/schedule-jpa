@@ -3,7 +3,7 @@ package com.example.schedulejpa.auth.service;
 import com.example.schedulejpa.auth.dto.LoginMember;
 import com.example.schedulejpa.auth.dto.SinupRequestDto;
 import com.example.schedulejpa.auth.exception.LoginFailedException;
-import com.example.schedulejpa.global.config.PasswordEncoder;
+import com.example.schedulejpa.common.config.PasswordEncoder;
 import com.example.schedulejpa.auth.exception.DuplicateMemberException;
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.service.component.MemberFinder;

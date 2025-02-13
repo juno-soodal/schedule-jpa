@@ -1,7 +1,7 @@
 package com.example.schedulejpa.comment.exception;
 
-import com.example.schedulejpa.global.common.exception.ErrorCode;
-import com.example.schedulejpa.global.common.exception.ScheduleAppException;
+import com.example.schedulejpa.common.exception.ErrorCode;
+import com.example.schedulejpa.common.exception.ScheduleAppException;
 
 public class CommentNotFoundException extends ScheduleAppException {
     public CommentNotFoundException() {

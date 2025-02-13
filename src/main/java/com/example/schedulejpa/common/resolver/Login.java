@@ -1,4 +1,4 @@
-package com.example.schedulejpa.global.resolver;
+package com.example.schedulejpa.common.resolver;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
