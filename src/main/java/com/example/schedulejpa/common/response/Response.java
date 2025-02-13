@@ -1,4 +1,4 @@
-package com.example.schedulejpa.global.response;
+package com.example.schedulejpa.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.data.domain.Page;

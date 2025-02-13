@@ -1,9 +1,8 @@
 package com.example.schedulejpa.schedule.entity;
 
 import com.example.schedulejpa.comment.entity.Comment;
-import com.example.schedulejpa.global.entity.BaseEntity;
+import com.example.schedulejpa.common.entity.BaseEntity;
 import com.example.schedulejpa.member.entity.Member;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +14,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDateTime;

@@ -1,12 +1,12 @@
 package com.example.schedulejpa.member.controller;
 
 import com.example.schedulejpa.auth.dto.LoginMember;
-import com.example.schedulejpa.global.resolver.Login;
+import com.example.schedulejpa.common.resolver.Login;
 import com.example.schedulejpa.member.dto.MemberDeleteRequestDto;
 import com.example.schedulejpa.member.dto.MemberRequestDto;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.service.MemberService;
-import com.example.schedulejpa.global.response.Response;
+import com.example.schedulejpa.common.response.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;

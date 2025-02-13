@@ -1,7 +1,7 @@
 package com.example.schedulejpa.member.service;
 
 import com.example.schedulejpa.comment.service.component.CommentWriter;
-import com.example.schedulejpa.global.config.PasswordEncoder;
+import com.example.schedulejpa.common.config.PasswordEncoder;
 import com.example.schedulejpa.member.dto.MemberResponseDto;
 import com.example.schedulejpa.member.entity.Member;
 import com.example.schedulejpa.member.exception.InvalidPasswordException;

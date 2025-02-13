@@ -1,6 +1,6 @@
-package com.example.schedulejpa.global.common.exception;
+package com.example.schedulejpa.common.exception;
 
-import com.example.schedulejpa.global.response.ErrorResponse;
+import com.example.schedulejpa.common.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
