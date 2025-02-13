@@ -1,7 +1,7 @@
-package com.example.schedulejpa.global.resolver;
+package com.example.schedulejpa.common.resolver;
 
 import com.example.schedulejpa.auth.dto.LoginMember;
-import com.example.schedulejpa.global.constant.SessionConst;
+import com.example.schedulejpa.common.constant.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.core.MethodParameter;

@@ -1,6 +1,6 @@
-package com.example.schedulejpa.global.config;
+package com.example.schedulejpa.common.config;
 
-import com.example.schedulejpa.global.filter.LoginFilter;
+import com.example.schedulejpa.common.filter.LoginFilter;
 import jakarta.servlet.Filter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;

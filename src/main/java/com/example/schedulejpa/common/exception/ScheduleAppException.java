@@ -1,4 +1,4 @@
-package com.example.schedulejpa.global.common.exception;
+package com.example.schedulejpa.common.exception;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

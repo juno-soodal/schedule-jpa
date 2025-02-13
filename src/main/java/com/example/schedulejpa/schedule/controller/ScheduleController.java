@@ -1,8 +1,8 @@
 package com.example.schedulejpa.schedule.controller;
 
 import com.example.schedulejpa.auth.dto.LoginMember;
-import com.example.schedulejpa.global.resolver.Login;
-import com.example.schedulejpa.global.response.Response;
+import com.example.schedulejpa.common.resolver.Login;
+import com.example.schedulejpa.common.response.Response;
 import com.example.schedulejpa.schedule.dto.PaginationRequest;
 import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
@@ -10,8 +10,6 @@ import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
 import com.example.schedulejpa.schedule.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

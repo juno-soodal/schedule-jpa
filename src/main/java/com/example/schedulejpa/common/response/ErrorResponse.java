@@ -1,7 +1,6 @@
-package com.example.schedulejpa.global.response;
+package com.example.schedulejpa.common.response;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 public class ErrorResponse {

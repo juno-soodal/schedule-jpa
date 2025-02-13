@@ -1,10 +1,9 @@
-package com.example.schedulejpa.global.filter;
+package com.example.schedulejpa.common.filter;
 
 
-import com.example.schedulejpa.global.constant.SessionConst;
-import com.example.schedulejpa.global.response.ErrorResponse;
+import com.example.schedulejpa.common.constant.SessionConst;
+import com.example.schedulejpa.common.response.ErrorResponse;
 import com.example.schedulejpa.member.exception.UnAuthorizedAccessException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;

@@ -1,6 +1,6 @@
 package com.example.schedulejpa.member.entity;
 
-import com.example.schedulejpa.global.entity.BaseEntity;
+import com.example.schedulejpa.common.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
