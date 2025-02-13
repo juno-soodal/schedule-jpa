@@ -3,10 +3,14 @@ package com.example.schedulejpa.comment.service;
 import com.example.schedulejpa.comment.dto.CommentRequestDto;
 import com.example.schedulejpa.comment.dto.CommentResponseDto;
 import com.example.schedulejpa.comment.entity.Comment;
+import com.example.schedulejpa.comment.exception.CommentNotFoundException;
 import com.example.schedulejpa.comment.repository.CommentRepository;
 import com.example.schedulejpa.member.entity.Member;
+import com.example.schedulejpa.member.exception.MemberNotFoundException;
+import com.example.schedulejpa.member.exception.UnAuthorizedAccessException;
 import com.example.schedulejpa.member.repository.MemberRepository;
 import com.example.schedulejpa.schedule.entity.Schedule;
+import com.example.schedulejpa.schedule.exception.ScheduleNotFoundException;
 import com.example.schedulejpa.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -28,7 +32,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public List<CommentResponseDto> getComments(Long scheduleId) {
         if(!scheduleRepository.existsById(scheduleId)){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "없는 일정입니다.");
+            throw new ScheduleNotFoundException();
         }
 
         List<Comment> comments = commentRepository.findComments(scheduleId);
@@ -38,16 +42,16 @@ public class CommentService {
     @Transactional(readOnly = true)
     public CommentResponseDto getComment(Long commentId) {
 
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "없는 댓글입니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException());
 
         return CommentResponseDto.from(comment);
     }
 
     @Transactional
     public void createComment(Long scheduleId, String loginEmail, CommentRequestDto requestDto) {
-        Member member = memberRepository.findByEmail(loginEmail).orElseThrow(() -> new IllegalArgumentException("없는 유저입니다."));
+        Member member = memberRepository.findByEmail(loginEmail).orElseThrow(() -> new MemberNotFoundException());
 
-        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new IllegalArgumentException("없는 일정입니다."));
+        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new ScheduleNotFoundException());
 
         Comment comment = new Comment(requestDto.getCommentContent(), member);
         schedule.addComment(comment);
@@ -58,10 +62,10 @@ public class CommentService {
 
     @Transactional
     public void updateComment(Long commentId, String loginEmail, CommentRequestDto requestDto) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "없는 댓글입니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException());
         //TODO 리팩토링 필요
         if (!comment.getMember().getEmail().equals(loginEmail)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정권한이 없습니다.");
+            throw new UnAuthorizedAccessException();
         }
 
         comment.updateCommentContent(requestDto.getCommentContent());
@@ -69,11 +73,11 @@ public class CommentService {
 
     @Transactional
     public void deleteByMemberEmail(Long commentId, String loginEmail) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "없는 댓글입니다."));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException());
 
         //TODO 리팩토링 필요
         if (!comment.getMember().getEmail().equals(loginEmail)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정권한이 없습니다.");
+            throw new UnAuthorizedAccessException();
         }
         commentRepository.deleteComment(comment);
     }

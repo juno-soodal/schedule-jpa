@@ -2,11 +2,14 @@ package com.example.schedulejpa.schedule.service;
 
 import com.example.schedulejpa.comment.service.CommentService;
 import com.example.schedulejpa.member.entity.Member;
+import com.example.schedulejpa.member.exception.MemberNotFoundException;
+import com.example.schedulejpa.member.exception.UnAuthorizedAccessException;
 import com.example.schedulejpa.member.repository.MemberRepository;
 import com.example.schedulejpa.schedule.dto.SchedulePatchRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleRequestDto;
 import com.example.schedulejpa.schedule.dto.ScheduleResponseDto;
 import com.example.schedulejpa.schedule.entity.Schedule;
+import com.example.schedulejpa.schedule.exception.ScheduleNotFoundException;
 import com.example.schedulejpa.schedule.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
@@ -33,7 +36,7 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponseDto createSchedule(String loginEmail, ScheduleRequestDto requestDto) {
         Member member = memberRepository.findByEmail(loginEmail)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "없는 유저입니다."));
+                .orElseThrow(() -> new MemberNotFoundException());
 
         Schedule schedule = new Schedule(member, requestDto.getTitle(), requestDto.getContent());
         scheduleRepository.save(schedule);
@@ -53,19 +56,19 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public ScheduleResponseDto getSchedule(Long scheduleId) {
 
-        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
+        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new ScheduleNotFoundException());
         return ScheduleResponseDto.fromSchedule(schedule);
     }
 
     @Transactional
     public void updateSchedule(Long scheduleId, String loginEmail, ScheduleRequestDto requestDto) {
 
-        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
+        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new ScheduleNotFoundException());
 
         //TODO 객체지향적으로 리팩토링 필요
         //TODO JOIN FETCH 고려
         if (!schedule.getMember().getEmail().equals(loginEmail)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정 권한이 없습니다.");
+            throw new UnAuthorizedAccessException();
         }
         schedule.update(requestDto.getTitle(), requestDto.getContent());
 
@@ -74,12 +77,12 @@ public class ScheduleService {
 
     @Transactional
     public void updatePartialSchedule(Long scheduleId,String loginEmail, SchedulePatchRequestDto requestDto) {
-        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
+        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new ScheduleNotFoundException());
 
         //TODO 객체지향적으로 리팩토링 필요
         //TODO JOIN FETCH 고려
         if (!schedule.getMember().getEmail().equals(loginEmail)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정 권한이 없습니다.");
+            throw new UnAuthorizedAccessException();
         }
 
         if (StringUtils.hasText(requestDto.getTitle())) {
@@ -94,13 +97,13 @@ public class ScheduleService {
 
     @Transactional
     public void deleteSchedule(Long scheduleId, String loginEmail) {
-        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new IllegalArgumentException("해당 일정이 없습니다."));
+        Schedule schedule = scheduleRepository.findSchedule(scheduleId).orElseThrow(() -> new ScheduleNotFoundException());
 
 
         //TODO 객체지향적으로 리팩토링 필요
         //TODO JOIN FETCH 고려
         if (!schedule.getMember().getEmail().equals(loginEmail)) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "삭제 권한이 없습니다.");
+            throw new UnAuthorizedAccessException();
         }
 
         commentService.deleteAllByScheduleId(schedule.getId());
