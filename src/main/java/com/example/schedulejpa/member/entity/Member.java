@@ -57,4 +57,8 @@ public class Member extends BaseEntity {
     public void updateName(String name) {
         this.name = name;
     }
+
+    public boolean isSameEmail(String loginEmail) {
+        return this.email.equals(loginEmail);
+    }
 }

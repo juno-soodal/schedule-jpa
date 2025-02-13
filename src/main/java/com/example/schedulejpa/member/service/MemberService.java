@@ -8,6 +8,7 @@ import com.example.schedulejpa.member.exception.InvalidPasswordException;
 import com.example.schedulejpa.member.exception.MemberNotFoundException;
 import com.example.schedulejpa.member.repository.MemberRepository;
 import com.example.schedulejpa.schedule.service.ScheduleService;
+import com.example.schedulejpa.schedule.service.ScheduleWriter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final ScheduleService scheduleService;
+    //    private final ScheduleService scheduleService;
+    private final ScheduleWriter scheduleWriter;
     private final CommentService commentService;
     private final PasswordEncoder passwordEncoder;
 
@@ -61,7 +63,7 @@ public class MemberService {
         }
 
         //TODO 연관엔티티 삭제로직
-        scheduleService.softDeleteSchedulesByMember(member.getId());
+        scheduleWriter.softDeleteSchedulesByMember(member.getId());
         commentService.softDeleteCommentsByMember(member.getId());
         member.softDelete();
     }
