@@ -13,4 +13,8 @@ public class CommentWriter {
     public void deleteAllByScheduleId(Long scheduleId) {
         commentRepository.bulkDeleteByScheduleId(scheduleId);
     }
+
+    public void softDeleteCommentsByMember(Long memberId) {
+        commentRepository.bulkUpdateDeletedAtByMember(memberId);
+    }
 }

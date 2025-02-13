@@ -6,6 +6,8 @@ import com.example.schedulejpa.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberReader {
@@ -14,5 +16,13 @@ public class MemberReader {
 
     public Member findByEmail(String loginEmail) {
         return memberRepository.findByEmail(loginEmail).orElseThrow(() -> new MemberNotFoundException());
+    }
+
+    public  List<Member> findMembers() {
+        return memberRepository.findMembers();
+    }
+
+    public Member findById(Long memberId) {
+        memberRepository.findById(memberId).orElseThrow(() -> new MemberNotFoundException());
     }
 }
