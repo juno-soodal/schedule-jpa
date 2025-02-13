@@ -44,7 +44,7 @@ public class CommentRepository {
         em.remove(comment);
     }
 
-    public void bulkDelete(Long scheduleId) {
+    public void bulkDeleteByScheduleId(Long scheduleId) {
         em.createNativeQuery("DELETE FROM comment WHERE schedule_id = :scheduleId")
                 .setParameter("scheduleId", scheduleId)
                 .executeUpdate();
