@@ -1,4 +1,4 @@
-package com.example.schedulejpa.member.exception;
+package com.example.schedulejpa.auth.exception;
 
 import com.example.schedulejpa.global.common.exception.ErrorCode;
 import com.example.schedulejpa.global.common.exception.ScheduleAppException;
